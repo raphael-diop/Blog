@@ -42,13 +42,44 @@ session_start();
 
 
         public function connect($login, $password){
+            $this->login = $login;
             $this->password = $password;
-            $request = "SELECT*FROM utilisateurs WHERE login = '$this->login' AND password = '$this->password'";
+
+            //recupération du login dans BDD
+            $request = "SELECT login FROM `utilisateurs` WHERE login = '$this->login'";
             $calcul = $this->bdd->prepare($request);
             $calcul -> execute();
-            $result = $calcul->fetchAll(PDO::FETCH_ASSOC);
-            $_SESSION['user'] = $result;
+            $result = $calcul->rowCount();
             var_dump($result);
+
+             //recupération du password dans BDD
+            $request2 = "SELECT password FROM `utilisateurs` WHERE login = '$this->login'";
+            $calcul2 = $this->bdd->prepare($request2);
+            $calcul2 -> execute();
+            // On utilise fetchColumn car la fonction password_verify a besoin d'un résultat sous forme de string
+            $result2 = $calcul2-> fetchColumn();
+            var_dump($result2);
+
+            // Création variable récupération décryptage password
+            $check_password = $result2;
+            var_dump($check_password);
+
+
+            //Vérification que le login existe bien 
+            if(($result) == 1){
+                //vérification du password
+                if(password_verify($password, $check_password)){
+                    // Si le password est vérifié alors on récupère toutes les infos user et on les met dans la session
+                    $request3 = "SELECT*FROM `utilisateurs` WHERE login = '$this->login'";
+                    $calcul3 = $this->bdd->prepare($request3);
+                    $calcul3 -> execute();
+                    $result3 = $calcul3-> fetchAll(PDO::FETCH_ASSOC);
+                    $_SESSION['user'] = $result3;
+                    echo 'Connexion reussie';
+                    // A rejouter : header('location:')
+                    var_dump($_SESSION['user']);
+                }else{echo "Password incorrect";}
+            }else{echo 'Login inexistant';}
         }
 
         public function disconnect(){
@@ -128,5 +159,4 @@ session_start();
         
     }
 
-    
 ?>
