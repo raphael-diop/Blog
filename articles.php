@@ -102,16 +102,16 @@ $articles = $query->fetchAll(PDO::FETCH_ASSOC);
     <nav>
                     <ul>
                         <li <?= ($currentPage == 1) ? "disabled" : "" ?>>
-                            <a href="./?page=<?= $currentPage - 1 ?>" > Précédente</a>
+                            <a href="./articles.php/?page=<?= $currentPage - 1 ?>" > Précédente</a>
                         </li>
                         <?php for($page = 1; $page <= $pages; $page++): ?>
                           <!-- Lien vers chacune des pages (activé si on se trouve sur la page correspondante) -->
                           <li <?= ($currentPage == $page) ? "active" : "" ?>>
-                                <a href="./?page=<?= $page ?>"><?= $page ?></a>
+                                <a href="./articles.php/?page=<?= $page ?>"><?= $page ?></a>
                             </li>
                         <?php endfor ?>
                           <li <?= ($currentPage == $pages) ? "disabled" : "" ?>>
-                            <a href="./?page=<?= $currentPage + 1 ?>">Suivante</a>
+                            <a href="./articles.php/?page=<?= $currentPage + 1 ?>">Suivante</a>
                         </li>
                     </ul>
                 </nav>
