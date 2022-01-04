@@ -1,5 +1,6 @@
 <?php
-
+require_once 'config.php'; 
+var_dump($_SESSION);
 
 //connexion
 $user = 'root';
@@ -9,7 +10,7 @@ try
 {
     $bdd = new PDO('mysql:host=localhost;dbname=blog', $user, $pass);
     $bdd->exec('SET NAMES "UTF8"');
-    /*foreach ($bdd->query('SELECT * FROM articles') as $row) 
+    /*foreach ($bdd->query('SELECT * FROM articles') as $row) // test, ne pas activer, erreur Objet
     {
         //print_r($row);
         echo "<pre>";
@@ -70,6 +71,7 @@ $articles = $query->fetchAll(PDO::FETCH_ASSOC);
 
 <!DOCTYPE html>
 <html lang="en">
+<link rel="stylesheet" href="articles_css.css">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -98,20 +100,21 @@ $articles = $query->fetchAll(PDO::FETCH_ASSOC);
             ?>
         </tbody>
     </table>
+    
 
     <nav>
                     <ul>
-                        <li <?= ($currentPage == 1) ? "disabled" : "" ?>>
+                        <li class="<?php if($currentPage == '1') {echo "disabled"; } ?>"> 
                             <a href="./articles.php/?page=<?= $currentPage - 1 ?>" > Précédente</a>
                         </li>
                         <?php for($page = 1; $page <= $pages; $page++): ?>
-                          <!-- Lien vers chacune des pages (activé si on se trouve sur la page correspondante) -->
+                          <!-- Lien vers chacune des pages (activé si on se trouve sur la page correspondante) https://www.youtube.com/watch?v=dH4xHMFfS6c 28:00-->
                           <li <?= ($currentPage == $page) ? "active" : "" ?>>
                                 <a href="./articles.php/?page=<?= $page ?>"><?= $page ?></a>
                             </li>
                         <?php endfor ?>
-                          <li <?= ($currentPage == $pages) ? "disabled" : "" ?>>
-                            <a href="./articles.php/?page=<?= $currentPage + 1 ?>">Suivante</a>
+                          <li class="<?php if($currentPage == $pages) {echo "disabled"; } ?>">
+                            <a href="./articles.php/?page=<?php if($currentPage != $pages) { echo $currentPage + 1;} ?>">Suivante</a>
                         </li>
                     </ul>
                 </nav>
