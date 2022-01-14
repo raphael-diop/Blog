@@ -203,34 +203,43 @@ session_start();
             
         }
 
-        public function article_com($id_article){
-            // recupération des articles et commentaire associés
+        public function getArt($id_article){
             $this->id_article = $id_article;
-            $request = 'SELECT `article`, `commentaire` FROM `articles` INNER JOIN `commentaires` ON articles.id = commentaires.id_article WHERE commentaires.id_article = "'.$this->id_article.'";';
+            $request = 'SELECT `article` FROM `articles` WHERE `id` = "'.$this->id_article.'";';
             $calcul = $this->bdd->prepare($request);
             $calcul->execute();
             $result = $calcul->fetchAll(PDO::FETCH_ASSOC);
 
-            
+            return $result;
+            var_dump($result);
+        }
+
+        public function getCom($id_article){
+            // recupération des articles et commentaire associés
+            $this->id_article = $id_article;
+            $request = 'SELECT `commentaire` FROM `articles` INNER JOIN `commentaires` ON articles.id = commentaires.id_article WHERE commentaires.id_article = "'.$this->id_article.'";';
+            $calcul = $this->bdd->prepare($request);
+            $calcul->execute();
+            $result = $calcul->fetchAll(PDO::FETCH_ASSOC);
             
             return $result;
+           
             var_dump($result);
 
         }
 
         public function insert_com($commentaire, $id_article){
             // insertion des nouveaux commentaires
-            $this->id_article = $id_article;
-            $this->commentaire;
+            $this->id_article;
+            $this->commentaire = $commentaire;
             $this -> id_utilisateur = $_SESSION['user']['0']['id'];
-            $this -> id = $_SESSION['user']['0']['id'];
-            $request = "INSERT INTO `commentaires`(`id` = $this->id, `commentaire` = $this->commentaire,`id_utilisateur` = $this->id_utilisateur, `date` = NOW) WHERE `id_article` = $id_articles";
+            $request = "INSERT INTO `commentaires`( `commentaire`, `id_article`, `id_utilisateur`, `date`) VALUES ( '$this->commentaire','$this->id_article',  '$this->id_utilisateur', NOW())";
             $calcul = $this->bdd->prepare($request);
             $calcul->execute();
             $result2 = $calcul->fetchAll(PDO::FETCH_ASSOC);
 
             return $result2;
-            vardump($result2);
+            vardump($request);
         }
 
     }

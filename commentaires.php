@@ -6,17 +6,21 @@ require_once 'config.php';
 if(isset($_GET['id_articles']) && !empty($_GET['id_articles'])){
     $id_article = $_GET['id_articles'];
     $Article = new Article();
-    $com = $Article->article_com($id_article);
+    $com = $Article->getCom($id_article);
 
+    $art = $Article->getArt($id_article);
     var_dump($com);
 }
 
 
 //Ajouter un commentaire 
  if (isset($_POST['commentaire'])) {
+    $id_article = $_GET['id_articles'];
     $commentaire = htmlspecialchars($_POST['commentaire']);
     $insert = $Article->insert_com($commentaire, $id_article);
     var_dump($insert);
+    var_dump($id_article);
+    var_dump($commentaire);
  }
 
 
@@ -43,8 +47,13 @@ if(isset($_GET['id_articles']) && !empty($_GET['id_articles'])){
                 </h1> 
                 <P>
                     <?php 
-                        $article = $com['0']['article'];
-                        echo $article;
+                    // if(!isset($article)){
+                    //     $article = '';
+                    // }else{
+                        $affiche = $art['0']['article'];
+                        echo "<p>$affiche</p>";
+                    // }
+                        
                       ?>
                  </P>
 
