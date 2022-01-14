@@ -1,56 +1,83 @@
 <?php
-require 'config.php'; 
-// require 'admin-fonction.php';
-// include 'admin-fonction.php';
+// ------------------------------- modifier utilisateur---------------------------
+require_once 'config.php'; 
 include 'header.php';
 $bdd = new PDO('mysql:host=localhost;dbname=blog;charset=utf8', 'root', '');
-// en recuper ID qui est recuperer dans url et je verifie si il est pas vide
+if (isset($_POST['logout']))
+{
+  session_destroy();
+  header('location:connexion.php');
+  $user= new user;
+  $user->disconnect();
+}
+// $_SESSION['user']['id'] = ;
+var_dump($_GET['id']);
 
-if(isset($_GET['id']) AND !empty($_GET['id'])){
-    echo"coucou3";
-
-   $getid = $_GET['id'];
-   $recupUser = $bdd->prepare('SELECT * FROM UTILISATEURS wHERE id = ?');
-   $recupUser->execute(array($getid));
-   if($recupUser->rowcount()> 0){
-       var_dump($recupUser);
-   
+if(isset($_POST['envoyer'])){
+     if(isset($_POST['login']) && !empty($_POST['login'])
+    && isset($_POST['email']) && !empty($_POST['email'])
+    && isset($_POST['id_droits']) && !empty($_POST['id_droits'])){
     
-     $userInfo = $recupUser->fetch();
-     $login = $userInfo['login'];
-     $password = $userInfo['password'];
-     $email =$userInfo['email'];
-     var_dump($userInfo);
-    
-    if(isset($_GET['id'])){
+        // on ettoie les donées envoyé ;on enleve toute les balise html
+       $id = $_GET['id'];
+    //    $id = strip_tags($_POST['id']);
+       $login = strip_tags($_POST['login']);
+       $email = strip_tags($_POST['email']);
+       $id_droits=strip_tags($_POST['id_droits']);
 
-       echo"loulou4";
-    if($recupUser->rowCount()>0){
-        $userInfos = $recupUser->fetch();
-        
-        if(isset($_POST['login']) && isset($_POST['email']) && isset($_POST['password'])){
-        $updateUser = $bdd->prepare('UPDATE `utilisateurs` SET login = $login, password= $password, email= $email WHERE id = 1');
-        $recupUser->execute(array($getid));
-        $login = $_POST['login'];
-        $email = $_POST['email'];
-        $password = $_POST['password'];
-     
-        header('location: membres.php');
-        
-    //  }else{
-    //     var_dump($_GET['id']);
-    //     echo "Vous n'avez pas les droits administrateur";
-     }
-    }
-     echo"loulou2";
-    }
-   }else{
-       echo "aucun login trouvé";
-   }
- }else{
-    echo "aucun login trouvé";
- }
+       //    on insert l'utilisateur
+       $sql = 'UPDATE `utilisateurs` SET `login`=:login , `email`=:email ,`id_droits`=:id_droits WHERE `id`=:id;';
+       $query = $bdd->prepare($sql);
 
+       
+
+       $query->bindValue(':id', $id, PDO::PARAM_INT);
+       $query->bindValue(':login', $login, PDO::PARAM_STR);
+       $query->bindValue(':email', $email, PDO::PARAM_STR);
+       $query->bindValue(':id_droits',$id_droits, PDO::PARAM_INT);
+       $query->execute();
+      
+        }else{
+            $_SESSION['erreur'] = "le formulaire est incomplet";
+            }
+           
+    // est-ce que l'id existe et n'est pas vide dans l'url
+    if(isset($_GET['id']) && !empty($_GET['id'])){
+
+        // on ettoie id envoyé ;on enleve toute les balise html
+        $id=strip_tags($_GET['id']);
+        
+        $sql = 'SELECT * FROM utilisateurs WHERE `id` = :id';
+        // on prepare la requete
+        $query =$bdd->prepare($sql);
+        // on acroche id avec un bindvalue
+        $query->bindValue(':id', $id, PDO::PARAM_INT);
+        // on execute la requete
+        $query->execute();
+       
+        // et on recupere l'utilisateur
+        $utilisateurs = $query->fetch();
+        // on verifie si l'utilisateur existe
+            if(!$utilisateurs){
+                $_SESSION['erreur'] = "cet id n'existe pas";
+                header('location: index.php');
+                var_dump($_SESSION);
+            }
+    }else{
+        $_SESSION['erreur'] = "URL invalide";
+        header('location: index.php');
+
+        }
+    } 
+
+    $id= $_GET['id'];
+    $sql = "SELECT *FROM `utilisateurs` WHERE id='$id'";
+    // on prepare requete
+    $query = $bdd->prepare($sql);
+    // on éxecute la requete
+    $query->execute();
+    // on stock les resultats dans un tableau
+    $result = $query->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -62,29 +89,39 @@ if(isset($_GET['id']) AND !empty($_GET['id'])){
    
 </head>
 <body>
-        <form action="" method="POST">
-        <div class="user" style="border: 1px solid black;"></div>
-        <tr>
-            <label><td>Non:</td><td><input type="text" name="login" value=""></label></td>
-        </tr>
-        <tr>
-            <td>Email:</td><td><input type="text" name="email" value=""></td>
-        </tr>
-        <tr>
-            <td>Password:</td><td><input type="password" name="password" value=""></td>
-        </tr>
-        <tr>
-            <td> <input type=button  onClick="location.href='modifier-user.php?id='" style ="color:white;background-color: #096b66;" name="modifier" value='modifier'></td>
-        </tr>
-        </div>
-    </table>
-      
-    <?php
-    // }else{
-    //     echo "aucun utilisateurs n'est modifier";
-    //     }
-    ?>
-    
-    
+<main class="container">
+            <div class="row">
+                <section class="col-12">
+                    <h1>Modifier utilisateurs</h1>
+                    <?php
+                      foreach($result as $utilisateurs){
+                    
+                      ?>
+                    <form method="POST">
+                        <div class="form-group">
+                         <label for="login">Login</label>
+                         <input type="text" id="login" name="login" class="form-control" value="<?=$utilisateurs['login'] ?>">
+                        </div>
+                        <div class="form-group">
+                         <label for="email">email</label>
+                         <input type="text" id="email" name="email"  class="form-control" value="<?= $utilisateurs['email'] ?>">
+                        </div>
+                        <div class="form-group">
+                         <label for="id_droits">id_droits</label>
+                         <input type="text" id="id_droits" name="id_droits"  class="form-control" value="<?= $utilisateurs['id_droits'] ?>">
+                        </div>
+                        <div class="form-group">
+                         <input type="hidden" value="<?= $utilisateurs['id']?>" name="id">
+                        </div>
+                        <?php }?>
+                        <input type="submit" name="envoyer" value="Envoyer">
+                        <p><a href="index.php" class="btn btn-primary" >Retour</a> </p>
+                    </form>
+                </section>
+            </div>    
+        </main>
+    </body>
+
+  
 </body>
 </html>

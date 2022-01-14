@@ -27,7 +27,7 @@ if(isset($_GET['id']) AND !empty($_GET['id'])){
         $bannirUser = $bdd->prepare('DELETE FROM utilisateurs WHERE id = ?');
         // on execute cette requete bannirUser execute ptableau array et en paramtre en met $getid et rediriger l'utilisayeur vers notre page de membre
         $bannirUser->execute(array($getid));
-         header('location: membres.php');
+         header('location: details.php');
         }else{
             var_dump($_GET['id']);
             echo "Vous n'avez pas les droits administrateur";

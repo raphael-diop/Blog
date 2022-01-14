@@ -1,5 +1,13 @@
 <?php
 require_once 'config.php'; 
+include 'header.php';
+if (isset($_POST['logout']))
+{
+  session_destroy();
+  header('location:connexion.php');
+  $user= new user;
+  $user->disconnect();
+}
 
 $message = '';
 if(isset($_POST['login']) && isset($_POST['email']) && isset($_POST['password']) && isset($_POST['password_retype'])){
@@ -7,7 +15,6 @@ if(isset($_POST['login']) && isset($_POST['email']) && isset($_POST['password'])
     $email = htmlspecialchars($_POST['email']);
     $password = htmlspecialchars($_POST['password']);
     $password_retype = htmlspecialchars($_POST['password_retype']);
-
     //Si le password et le password_retype identiques alors je crypte le mdp et j'appel la fonction d'inscription 
     if($password === $password_retype){
         $password = password_hash($password, PASSWORD_BCRYPT);

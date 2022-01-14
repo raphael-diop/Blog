@@ -114,7 +114,7 @@ lastPage().">Dernier
 //          31/08/2009 !! COPYRIGHT !!
 //--------A utiliser sans moderation :D -------------------------------
 
- Class qui met automatiquement en forme la pagination
+//  Class qui met automatiquement en forme la pagination
 
 
 class Page{  
