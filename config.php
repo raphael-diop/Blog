@@ -84,6 +84,9 @@ session_start();
                     $calcul3 -> execute();
                     $result3 = $calcul3-> fetchAll(PDO::FETCH_ASSOC);
                     $_SESSION['user'] = $result3;
+                        if($password === 'admin'){
+                            header('location: admin.php');
+                        }
                     echo 'Connexion reussie';
                     // A rejouter : header('location:')
                     var_dump($_SESSION['user']);
