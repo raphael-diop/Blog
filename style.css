@@ -1,3 +1,28 @@
+main{
+  margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+}
+
+.containerArticles{
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+  margin-left: 50px;
+
+}
+
+.articles{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  font-family: 'Noto Sans', sans-serif;
+
+}
+
+
+
 /*NAV BARRE*/
 #menu {
   font-family: 'Noto Sans', sans-serif;
@@ -66,7 +91,7 @@ overflow: hidden;
 width: 170px;
 background: #444444;
 position: absolute;
-z-index: 99;
+z-index: 10000000;
 display: none;
 }
 #menu ul.sub-menus li {
@@ -78,7 +103,7 @@ color: #FFFFFF;
 font-size: 16px;
 }
 #menu li:hover ul.sub-menus {
-display: block
+display: block;
 }
 #menu ul.sub-menus a:hover{
 background: #F2F2F2;
@@ -91,24 +116,25 @@ color: #444444;
 #menu ul.sub-menus a {padding-left:30px;}
 #menu li {display:block;float:none;width:auto;}
 #menu input, #menu label {position:absolute;top:0;left:0;display:block}
-#menu input {z-index:4}
+#menu input {z-index:10000}
 #menu input:checked + label {color:white}
 #menu input:checked + label:before {content:"\00d7"}
 #menu input:checked ~ ul {display:block}
 }
 
 /*SLIDER CSS*/
-*, ::before, ::after{
-  margin:0;
-  padding:0;
-  box-sizing: border-box;
-}
 
 .container{
-  max-width: 1000px;
-  max-height: 600px;
+  margin-top: 150px;
+  max-width: 1500px;
+  max-height: 500px;
   margin:0 auto;
   padding: 50px; 
+}
+
+img{
+  width: 1500px;
+  height: 600px;
 }
 
 .slider img {
@@ -140,6 +166,7 @@ img.active{
 }
 
 .btn-nav{
+  position: relative;
   font-size: 50px;
   margin: 0 15px;
   cursor: pointer;
