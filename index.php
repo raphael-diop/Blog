@@ -32,12 +32,36 @@
                 <script src="app.js"></script>
             </div>
         </div>
-            <div class="articles">
-                <?php foreach($art as $i){ 
-                    echo '<div class="article">' .$i['article']. '</div>';
-                } ?>
+        <!-- <div class="imageFond">
+            <img src="https://zupimages.net/up/22/03/69cq.jpg" alt="image tatane">
+        </div> -->
+            <div class="containerPresentation">
+                <div class="articles">
+                    <h1>ARTICLES:</h1>
+                    <?php foreach($art as $i){ 
+                        echo '<div class="article">' .$i['article']. '</div>';
+                    } ?>
+                    <a class="article" href="articles.php">LIENS VERS LES ARTICLES</a>
+                </div>
+                <!-- <div class="textPresentation">
+                    <p>
+                       Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi praesentium animi maiores vero earum eos voluptatum pariatur officiis aliquid, sit fuga. 
+                       Consequatur error reiciendis expedita architecto in vitae ab eos.
+                    </p>
+                </div> -->
+            </div>
+            <div class="containerSponsor">
+                <h1>NOS SPONSORS:</h1>
+                <div class="sponsors">
+                        <img src="https://static1.pureshopping.com/brands//5/89/35/@/8935-logo-5697da9ad52fd-290x180-1.png" alt="rivaldi">
+                        <img src="https://static.mensup.fr/photo_article/447039/175195/1200-L-amsterdam-maximator-la-plus-puissante-des-bires-de-caractre.jpg" alt="maximator">
+                        <img src="https://m.media-amazon.com/images/I/81UgbDnYARL._AC_SL1500_.jpg" alt="scorpio">
+                </div>
             </div>
     </main>
+    <footer>
+        
+    </footer>
     
 
 </body>
