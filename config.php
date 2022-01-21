@@ -245,6 +245,14 @@ session_start();
             vardump($request);
         }
 
+        public function recuperationArticles(){
+            $request = $request= "SELECT article FROM articles ORDER BY date DESC LIMIT 3";
+            $calcul=$this->bdd->prepare($request);
+            $calcul->execute();
+            $result=$calcul->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+        }
+
     }
 
 ?>
