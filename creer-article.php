@@ -22,9 +22,18 @@ catch (PDOException $e)
 
 
 $id = $_SESSION['user']['0']['id'];
-var_dump($id);
+$login = $_SESSION['user']['0']['login'];
 
-if($id == 1337 || $id == 42 ) {
+
+$sql = 'SELECT droits.id FROM `droits` INNER JOIN `utilisateurs` WHERE `nom` ="'.$login.'";';
+$query = $bdd->prepare($sql);
+$query->execute();
+$result = $query->fetch();
+$id_droits = $result['id'];
+var_dump($id_droits);
+
+
+if(isset($_SESSION) && $id_droits == 1337 || $id_droits == 42 ) {
     if(isset($_POST['envoyer']) && isset($_POST['titre']) && isset($_POST['article']) && isset($_POST['categorie'])) {
         echo "Merci pour votre contibution";
         $id_categorie = $_POST['categorie'];
