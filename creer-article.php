@@ -33,12 +33,11 @@ $id_droits = $result['id'];
 var_dump($id_droits);
 
 
-if(isset($_SESSION) && $id_droits == 1337 || $id_droits == 42 ) {
-    if(isset($_POST['envoyer']) && isset($_POST['titre']) && isset($_POST['article']) && isset($_POST['categorie'])) {
+if(isset($_SESSION) && $id_droits == 1337 || $id_droits == 42 && strlen($article) <= 30000) {
+    if(isset($_POST['envoyer']) && isset($_POST['article']) && isset($_POST['categorie'])) {
         echo "Merci pour votre contibution";
         $id_categorie = $_POST['categorie'];
         echo $id_categorie;
-        $titre = $_POST['titre'];
         $article = $_POST['article'];
         $request = "INSERT INTO `articles`( `article`, `id_utilisateur`, `id_categorie`, `date`) VALUES ( '$article','$id',  '$id_categorie', NOW())";
         $calcul = $bdd->prepare($request);
@@ -65,12 +64,9 @@ else {
                 Article
                  </h1>
 
-
-                 <textarea maxlength="2000" name="titre" cols="20" rows="1">Titre</textarea>
-
                 <h1>
                 </h1>
-                <textarea name="article" cols="52" rows="5">Créez votre article</textarea>
+                <textarea name="article" cols="52" rows="5" maxlength="30000">Créez votre article</textarea>
 
                 <input type="submit" id='submit' name="envoyer" value='Envoyer'>
                 <h1></h1>

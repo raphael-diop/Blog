@@ -1,6 +1,8 @@
 <?php
 require_once 'config.php'; 
-var_dump($_SESSION);
+include 'header.php';
+
+//var_dump($_SESSION);
 
 //connexion
 $user = 'root';
@@ -46,7 +48,7 @@ if(!empty($_GET['categorie']) && isset($_GET['categorie'])) {
     $result = $query->fetch();
 //je charge le nombre total d'article en variable    
     $nbArticles = (int) $result['nb_articles'];
-    var_dump($nbArticles);
+    //var_dump($nbArticles);
 //je détermine le nombre d'article par page:5 et demande un entier en utilisant ceil(qui force la réception d'un entier) pour avoir le bon nombre de page (si 6 articles avec 5 articles par page, je dois avoir deux pages, pas 1,1)
     $parPage = 5;
 //par division de mon nombre d'article et du nombre d'article par page j'obtient l'entier correspondant au nombre de pageS total
@@ -114,44 +116,36 @@ else {
 
 <!DOCTYPE html>
 <html lang="en">
-<link rel="stylesheet" href="articles_css.css">
+<link rel="stylesheet" href="style.css">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital@0;1&display=swap');
+</style>
     <title>Document</title>
 </head>
 <body>
-    <table>
-        <thead>
-            <th>ID</th>
-            <th>Article</th>
-            <th>Date</th>
-        </thead>
-        <tbody>
+        <article class=rgarticle>
             <?php
             foreach($articles as $article) {
             ?>
+            <div class=articleshadow>    <p class="articledate"><?= $article['date'] ?></p>
+                <p><?= $article['article'] ?></p> </div>
 
-            <tr>
-                <td><?= $article['id'] ?></td>
-                <td><?= $article['article'] ?></td>
-                <td><?= $article['date'] ?></td>
-            </tr>
             <?php
             }
             ?>
-        </tbody>
-    </table>
-    
-
-    <nav>
+        </article>
+<div class="centrerpagination">
+    <nav class="pagination">
     <ul>                 <!-- dans cette boucle et cette pagination j'utilise l'appel d'un css par une condition php pour désactiver le bouton suivant et précédent
                         avec l'echo disabled, j'utilise aussi des condition pour générer mon url qui devra prendre la forme suivante : articles.php?page=1 si aucune catégorie n'est selectionné
                         et la forme suivante articles.php?categorie=jul&amp;page=1 si une catégorie est selectionné, si il y a deux infos dans get on utilise &amp; pour les mettre à la suite
                         le echo : "?" me permet d'afficher ce foutu point d'interrogation de l'enfer du cul qui ne doit être présent avant "page=" QUE si il n'y a pas de catégorie selectionné car il ne doit être présent qu'une fois dans l'url après articles.php-->
                         <li class="<?php if($currentPage == '1') {echo "disabled"; } ?>"> 
-                            <a href="./articles.php<?php if(isset($_GET['categorie']) && !empty($_GET['categorie'])) {echo "?categorie=" . $nomcat . $getajout ;} else {echo "?"; }?>page=<?= $currentPage - 1 ?>" > Précédente</a>
+                            <a href="./articles.php<?php if(isset($_GET['categorie']) && !empty($_GET['categorie'])) {echo "?categorie=" . $nomcat . $getajout ;} else {echo "?"; }?>page=<?= $currentPage - 1 ?>" > ◄</a>
                         </li>
                         <?php for($page = 1; $page <= $pages; $page++): ?>
                           <!-- Lien vers chacune des pages (activé si on se trouve sur la page correspondante) https://www.youtube.com/watch?v=dH4xHMFfS6c 28:00-->
@@ -160,12 +154,13 @@ else {
                             </li>
                         <?php endfor ?>
                           <li class="<?php if($currentPage == $pages) {echo "disabled"; } ?>">
-                            <a href="./articles.php<?php if(isset($_GET['categorie']) && !empty($_GET['categorie'])) {echo "?categorie=" . $nomcat . $getajout ;} else {echo "?"; }?>page=<?php if($currentPage != $pages) { echo $currentPage + 1;} ?>">Suivante</a>
+                            <a href="./articles.php<?php if(isset($_GET['categorie']) && !empty($_GET['categorie'])) {echo "?categorie=" . $nomcat . $getajout ;} else {echo "?"; }?>page=<?php if($currentPage != $pages) { echo $currentPage + 1;} ?>">►</a>
                         </li>
                     </ul>
                 </nav>
+</div>
 
-                <form method="GET">
+                <!--<form method="GET">
     <a href="./articles.php?categorie=life">
         <input type="button" value="life">
     </a>
@@ -178,7 +173,7 @@ else {
     <a href="./articles.php?categorie=road">
         <input type="button" value="road">
     </a>
-    </form>
+    </form>-->
     
 </body>
 </html>
