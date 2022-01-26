@@ -25,16 +25,19 @@ if(isset($_POST['login']) && isset($_POST['email']) && isset($_POST['password'])
     <link rel="stylesheet" href="style.css">
     <title>Profil</title>
 </head>
-<body>
+<body class='body'>
+
+    <?php require 'header.php'; ?>
+
 <main class="main">
     <form class="formContainer" action="" method="post">
-        <h1>MODIFICATION DU PROFIL</h1>
+        <h1> PROFIL</h1>
+        <?php if(isset($_SESSION['message'])){echo $_SESSION['message'];} ?>
         <p><input type="text" name="login" class="zonetext" required="required" value="<?php if(isset($login)){echo $login; }else{ echo $_SESSION['user']['0']['login'];}?>"></p>
         <p><input type="text" name="email" class="zonetext" required="required" value="<?php if(isset($email)){echo $email; }else{ echo $_SESSION['user']['0']['email'];}?>"></p>
         <p><input type="password" name="password" class="zonetext" required="required" placeholder="Password ..."></p>
         <p><input type="password" name="password_retype" class="zonetext" required="required" placeholder="Password Confirmation ..."></p>
         <p><input type="submit" class="boutonvalidation" name="submit"></p>
-        <p><a href="deconnexion.php">Deconnexion</a></p>
 
     </form>
 </main>

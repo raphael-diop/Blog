@@ -10,6 +10,7 @@ session_start();
         public $email;
         protected $password;
         private $id_droit;
+    
         
         
         public function __construct(){
@@ -36,8 +37,8 @@ session_start();
                 $requetesql1 = "INSERT INTO `utilisateurs` (`login`, `email`, `password`,`id_droits`) VALUES ('$this->login', '$this->email', '$this->password', 1)";
                 $calcul1 = $this->bdd->prepare($requetesql1);
                 $calcul1 -> execute();
-                echo 'Inscription reussie';
-            }else{echo 'Login deja existant';}
+                $_SESSION['message'] = '<div class="messageERR">'.'Inscription reussie'.'</div>';
+            }else{$_SESSION['message'] = '<div class="messageERR">'.'Login deja existant'.'</div>';;}
 
             //var_dump($result2);
         }
@@ -59,7 +60,6 @@ session_start();
             $calcul = $this->bdd->prepare($request);
             $calcul -> execute();
             $result = $calcul->rowCount();
-            var_dump($result);
 
              //recupération du password dans BDD
             $request2 = "SELECT password FROM `utilisateurs` WHERE login = '$this->login'";
@@ -67,11 +67,11 @@ session_start();
             $calcul2 -> execute();
             // On utilise fetchColumn car la fonction password_verify a besoin d'un résultat sous forme de string
             $result2 = $calcul2-> fetchColumn();
-            var_dump($result2);
+           
 
             // Création variable récupération décryptage password
             $check_password = $result2;
-            var_dump($check_password); 
+            
 
 
             //Vérification que le login existe bien 
@@ -87,11 +87,10 @@ session_start();
                         if($password === 'admin'){
                             header('location: admin.php');
                         }
-                    echo 'Connexion reussie';
+                    $_SESSION['message'] = '<div class="messageERR">'.'Connexion reussie'.'</div>';
                     // A rejouter : header('location:')
-                    var_dump($_SESSION['user']);
-                }else{echo "Password incorrect";}
-            }else{echo 'Login inexistant';}
+                }else{$_SESSION['message'] = '<div class="messageERR">'.'Password incorrect'.'</div>';}
+            }else{$_SESSION['message'] = '<div class="messageERR">'.'Login inexistant'.'</div>';}
         }
 
         public function disconnect(){
@@ -121,9 +120,9 @@ session_start();
             $result = $calcul->fetchAll(PDO::FETCH_ASSOC);
 
             if($request == true) { // vérifier si on doit signaler que c'est true ou donner une valeur numerique 
-                echo 'Modifications enregistrées';
-            }else{echo "Erreur d'enregistrement";}
-            var_dump($request);
+                $_SESSION['message'] = '<div class="messageERR">'.'Modifications enregistrés'.'</div>';;
+            }else{$_SESSION['message'] = '<div class="messageERR">'."Erreur d'enregistrement".'</div>';;}
+            
 
             //On recupere les modification de l'utilisateur (probleme = portee des variable vers la page profil)
 
@@ -131,7 +130,7 @@ session_start();
             $calcul2 = $this->bdd->prepare($request2);
             $calcul2 -> execute();
             $result2 = $calcul2->fetchAll(PDO::FETCH_ASSOC);
-            var_dump($result2);
+            
 
             //rajouté dans session donc recupérable sur profil
             $_SESSION['user'] = $result2;
@@ -199,6 +198,7 @@ session_start();
         private $id_droit;
         private $id_article;
         private $commentaire;
+        private $id_com;
         
         
         public function __construct(){
@@ -246,11 +246,29 @@ session_start();
         }
 
         public function recuperationArticles(){
-            $request = $request= "SELECT article FROM articles ORDER BY date DESC LIMIT 3";
+            $request = "SELECT article FROM articles ORDER BY date DESC LIMIT 3";
             $calcul=$this->bdd->prepare($request);
             $calcul->execute();
             $result=$calcul->fetchAll(PDO::FETCH_ASSOC);
             return $result;
+        }
+
+        public function recuperationCommentaires(){
+            $request = "SELECT*FROM `commentaires`";
+            $calcul=$this->bdd->prepare($request);
+            $calcul->execute();
+            $result=$calcul->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+        }
+
+        public function deleteCommentaire($id_com){
+            $this->id_com;
+            $request = "DELETE `commentaire` FROM `commentaires` WHERE 'id' = '$id_com'";
+            $calcul=$this->bdd->prepare($request);
+            $calcul->execute();
+            $result=$calcul->fetchAll(PDO::FETCH_ASSOC);
+            return $result;
+            var_dump($result);
         }
 
     }

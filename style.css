@@ -162,7 +162,7 @@ img.active{
 
 
 .containerPresentation{
-  margin-top: 100px;
+  margin-top: 0px;
   height: 40%;
   background-image: url('https://zupimages.net/up/22/03/8ev9.png');
   display: flex;
@@ -249,6 +249,57 @@ img.active{
   height: 330px;
 }
 
+/*STYLE INSCRIPTION CONNEXION*/
+
+.body{
+  background-color: lightblue;
+}
+
+.main{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+form{
+  background-image: url('https://www.jeunesfooteux.com/brevesfoot/photo/art/grande/11148582-18511542.jpg?v=1486657768');
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: column;
+  border: black 1px solid;
+  border-radius:2%;
+  width: 20%;
+  height: 400px;
+  margin-top: 5%;
+  box-shadow: 5px 5px 5px lightgrey;
+}
+
+form h1{
+  font-family: 'Noto Sans', sans-serif;
+  color: white;
+}
+
+form input[type="text"]{
+  border-radius:5%;
+  font-size: 15px;
+  font-family: 'Noto Sans', sans-serif;
+}
+
+form input[type="password"]{
+  border-radius:5%;
+  font-size: 15px;
+  font-family: 'Noto Sans', sans-serif;
+}
+
+form input[type="submit"]{
+  border-radius:5%;
+  font-size: 18px;
+  font-family: 'Noto Sans', sans-serif;
+}
+
+/*footer*/
+
 footer{
   margin-top:100px;
   height: 300px;
@@ -256,8 +307,6 @@ footer{
   background-color: lightblue;
 }
 
-
-/*footer*/
 
 .container{
   max-width: 1170px;

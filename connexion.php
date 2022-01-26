@@ -1,7 +1,6 @@
 <?php
 require_once 'config.php'; 
 
-$message = '';
 if(isset($_POST['login']) && isset($_POST['password'])){
     $login = htmlspecialchars($_POST['login']);
     $password = htmlspecialchars($_POST['password']);
@@ -9,7 +8,6 @@ if(isset($_POST['login']) && isset($_POST['password'])){
 
     $user = new user();
     $user->connect($login, $password);
-    
 }
 ?>
 
@@ -22,11 +20,14 @@ if(isset($_POST['login']) && isset($_POST['password'])){
     <link rel="stylesheet" href="style.css">
     <title>Connexion</title>
 </head>
-<body>
+
+    <?php require 'header.php'; ?>
+
+<body class='body'>
 <main class="main">
     <form class="formContainer" action="" method="post">
         <h1>CONNEXION</h1>
-        <?php echo $message;?>
+        <?php if(isset($_SESSION['message'])){echo $_SESSION['message'];} ?>
         <p><input type="text" name="login" class="zonetext" placeholder="Login..."></p>
         <p><input type="password" name="password" class="zonetext"  placeholder="Password ..."></p>
         <p><input type="submit" class="boutonvalidation" name="submit"></p>

@@ -29,11 +29,15 @@ if(isset($_POST['login']) && isset($_POST['email']) && isset($_POST['password'])
     <link rel="stylesheet" href="style.css">
     <title>Inscription</title>
 </head>
-<body>
+<body class='body'>
+
+    <?php require 'header.php';?>
+
 <main class="main">
     <form class="formContainer" action="" method="post">
-        <h1>FORMULAIRE D'INSCRIPTION</h1>
-        <?php echo $message;?>
+        <h1>INSCRIPTION</h1>
+        <?php echo $message; ?>
+        <?php if(isset($_SESSION['message'])){echo $_SESSION['message'];} ?>
         <p><input type="text" name="login" class="zonetext" required="required" placeholder="Login..."></p>
         <p><input type="text" name="email" class="zonetext" required="required" placeholder="Mail ..."></p>
         <p><input type="password" name="password" class="zonetext" required="required" placeholder="Password ..."></p>
