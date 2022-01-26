@@ -21,16 +21,18 @@ $query = $bdd->prepare($sql);
 $query->execute();
 $result = $query->fetchAll(PDO::FETCH_ASSOC);
 $categories = $result;
-$id = $_SESSION['user']['0']['id'];
-$login = $_SESSION['user']['0']['login'];
-//var_dump($login);
 
-$sql = 'SELECT droits.id FROM `droits` INNER JOIN `utilisateurs` WHERE `nom` ="'.$login.'";';
+
+
+
+/*$sql = 'SELECT droits.id FROM `droits` INNER JOIN `utilisateurs` WHERE `nom` ="'.$login.'";';
 $query = $bdd->prepare($sql);
 $query->execute();
 $result = $query->fetch();
 $id_droits = $result['id'];
 var_dump($id_droits);
+}*/
+
 
 
 
@@ -68,17 +70,24 @@ var_dump($id_droits);
       </ul>
     </li>
 
-    <?php if (empty($_SESSION)) { echo 
-    "<li><a href='./inscription.php'>Inscription</a></li>
-    <li><a href='./connexion.php'>Connexion</a></li>";}
-    else 
-         {echo  "<li><a href='./modifier-user.php'>Modification de profil</a></li>";
-         echo "<li><a href='.deconnexion.php'>Déconnexion</a></li>";}?>
-
-    <?php if($id_droits == 1337 || $id_droits == 42 ) {
+    <?php 
+    if (isset($_SESSION) && !empty($_SESSION)) {
+      $id_droits = $_SESSION['user']['0']['id_droits'];
+      echo  "<li><a href='./modifier-user.php'>Modification de profil</a></li>";
+        echo "<li><a href='.deconnexion.php'>Déconnexion</a></li>";
+     
+    if($id_droits == 1337 || $id_droits == 42 ) {
 echo "<li><a href='./creer-article.php'>Création d'article</a></li>
 <li><a href='./admin.php'>Administration</a></li>";    
-} ?>
+    }
+}
+if (empty($_SESSION)|| !isset($_SESSION)) { echo 
+  "<li><a href='./inscription.php'>Inscription</a></li>
+  <li><a href='./connexion.php'>Connexion</a></li>";}
+         
+         ?>
+
+
 
 
 
@@ -89,7 +98,4 @@ echo "<li><a href='./creer-article.php'>Création d'article</a></li>
 
 
 </html>
-
-
-
 
