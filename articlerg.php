@@ -26,10 +26,16 @@ if(!empty($_GET['id_articles']) && isset($_GET['id_articles'])) {
     $query->execute();
     $result = $query->fetch();
     $article = $result;
-    
-var_dump($result);    
+    //var_dump($result);
 
+    $request = 'SELECT * FROM `articles` INNER JOIN `commentaires` ON articles.id = commentaires.id_article WHERE commentaires.id_article = "'.$id_articles.'";';
+    $calcul = $bdd->prepare($request);
+    $calcul->execute();
+    $result = $calcul->fetchAll(PDO::FETCH_ASSOC); 
+    $coms = $result; 
+    //var_dump($result);
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -46,16 +52,42 @@ var_dump($result);
 </head>
 <body>
     <main>
+
         <article class=rgarticle>
 
             <div class=articleshadow>    <p class="articledate"><?= $article['date'] ?></p>
                 <p><?= $article['article'] ?></p> 
-                <a href="./article.php?id_articles=<?= $article['id'] ?>" ><img class="commentaire-icone"
+                <a href="#ancre" ><img class="commentaire-icone"
                 src="https://www.zupimages.net/up/22/04/tlzm.png"
                 alt="Commentaires" ></a>
             </div>
-            
+
         </article>
+                    <?php
+            foreach($coms as $com) {
+            ?>
+            <div class=commentaireshadow>    <p class="commentairedate"><?= $com['date'] ?></p>
+                <p class="commentairestyle"><?= $com['commentaire'] ?></p> 
+                <a href="#ancre" ><img class="commentaire-icone"
+                src="https://www.zupimages.net/up/22/04/tlzm.png"
+                alt="Commentaires" ></a>
+            </div>
+
+            <?php
+            }
+            ?>
+        
+        <h1>
+                      POSTER VOTRE COMMENTAIRE:
+                </h1>
+            <div id="ancre">
+            <form action="" method="POST">
+                                <textarea name="commentaire" cols="52" rows="5"></textarea>
+
+                <input type="submit" id='submit' name="envoyer" value='Envoyer'>
+            </form>
+            </div>
+
     </main>
 
     </body>
