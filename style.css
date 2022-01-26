@@ -217,10 +217,10 @@ bottom: 0px;
 }
 
 /* PAGINATION*/
+
 .centrerpagination {
-  text-align: center;
-  vertical-align: bottom;
-  position: relative;
+text-align: center;
+  vertical-align: end;
   
   
 }
@@ -285,20 +285,22 @@ bottom: 0px;
 
 body {
   background-image: url('https://zupimages.net/up/22/03/8ev9.png');
+  background-attachment:fixed;
+  /*width: auto;
+  height: auto;
+  display: inline-block;
+  background-repeat:no-repeat;*/
+
 }
 
 .rgarticle{
-  position: absolute;
-  margin-left: 2%;
+  position: relative;
   height: 0%;
   width: 75%;
   padding: 8%;
   display: flex;
   flex-direction: column;
   font-family: 'Noto Sans', sans-serif;
-  word-break: break-all;
-
-  
 }
 
 
@@ -309,6 +311,7 @@ body {
   padding: 0.5em;
   margin: 2em;
   word-break: normal;
+  position: relative;
 }
 
 
@@ -333,4 +336,58 @@ body {
 
 text-align: end;}
 
+
+/*COMMENTAIRE*/
+.commentaire-icone {
+  width: 2.5em;
+  height: 2.5em;
+  /*position: absolute;*/
+  right:0;
+  bottom:0;
+  float: right;
+  /*padding-block-end:2em;*/
+  margin-left: 0.5em;
+}
+
+.commentaireshadow {
+  box-shadow: 0 1px 2px rgba(0,0,0,1);
+  margin: 1.5em;
+  background-color: rgba(255, 255, 255, .8);
+
+}
+
+.commentairedate {
+  font-family: 'Noto Sans', sans-serif;
+  font-style: italic;
+  color: grey;
+  margin: 0.5em;
+
+text-align: end;}
+
+.commentairestyle {
+  margin: 0.5em;
+  position: absolute;
+  height: 0%;
+  width: 55%;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Noto Sans', sans-serif;
+
+}
+
+.commentairestyle p{
+  font-size: 0.5em;
+  word-break: break-all;
+  padding: 0.5em;
+  margin: 2em;
+  word-break: normal;
+  position: relative;
+
+}
+
+.comwidth {
+  height: auto;
+  width:55%;
+
+}
 
