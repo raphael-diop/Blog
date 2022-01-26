@@ -1,44 +1,101 @@
-<?php 
+<?php
 require_once 'config.php';
-session_start();
-$errormess = '';?>
 
+$user = 'root';
+$pass = '';
+try
+{
+    $bdd = new PDO('mysql:host=localhost;dbname=blog', $user, $pass);
+    $bdd->exec('SET NAMES "UTF8"');
+
+}
+
+catch (PDOException $e)
+{
+    print "Error: " . $e->getMessage() . "<br/>";
+    die();
+}
+
+$sql = 'SELECT `nom` FROM `categories`';
+$query = $bdd->prepare($sql);
+$query->execute();
+$result = $query->fetchAll(PDO::FETCH_ASSOC);
+$categories = $result;
+
+
+
+
+/*$sql = 'SELECT droits.id FROM `droits` INNER JOIN `utilisateurs` WHERE `nom` ="'.$login.'";';
+$query = $bdd->prepare($sql);
+$query->execute();
+$result = $query->fetch();
+$id_droits = $result['id'];
+var_dump($id_droits);
+}*/
+
+
+
+
+
+            //foreach($categories as $categorie) { echo $categorie['nom'];}
+            
+        
+
+?>
 
 <!DOCTYPE html>
 <html lang="en">
+<link rel="stylesheet" href="navbar.css">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="perdu" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
+    </style>
 </head>
+<body>
+<nav id='menu'>
+  <input type='checkbox' id='responsive-menu'><label></label>
+  <ul>
+    <li><a href='./index.php'>Accueil</a></li>
 
-<header>
-    <nav class=nav>
-      <ul>
-    
-        <li><a href="#home">Home</a></li>
-        <li><a href="#news">News</a></li>
-        <li class="dropdown">
-        <a href="#" class="dropbtn">Dropdown</a>
-        <div class="dropdown-content">
-        <a href="#">Link 1</a>
-        <a href="#">Link 2</a>
-        <a href="#">Link 3</a>
-          </div>
-        </li>
-        <li><a href="index.php">Accueil</a></li>
-        <li><a href="connexion.php">connexion</a></li>
-        <li><a href="inscription.php">inscription</a></li>
-        <li><a href="article.php">article</a></li>
-        <li><a href="articles.php">articles</a></li>
-        <li><a href="creer-article.php">créer article</a></li>
-        <li><a href="admin.php">admin</a></li>
-        <li><a href="profil.php">profil</a></li>
-
-
+    <li><a class='dropdown-arrow' href='./articles.php'>Articles</a>
+        <ul class='sub-menus'>
+        <li>      <?php foreach($categories as $categorie) {?>
+        <a href="articles.php?categorie=<?=$categorie['nom']?>"><?=$categorie['nom']?></a></li>
+        <?php }?>
       </ul>
-    </nav>
-  </header>
+    </li>
+
+    <?php 
+    if (isset($_SESSION) && !empty($_SESSION)) {
+      $id_droits = $_SESSION['user']['0']['id_droits'];
+      echo  "<li><a href='./modifier-user.php'>Modification de profil</a></li>";
+        echo "<li><a href='.deconnexion.php'>Déconnexion</a></li>";
+     
+    if($id_droits == 1337 || $id_droits == 42 ) {
+echo "<li><a href='./creer-article.php'>Création d'article</a></li>
+<li><a href='./admin.php'>Administration</a></li>";    
+    }
+}
+if (empty($_SESSION)|| !isset($_SESSION)) { echo 
+  "<li><a href='./inscription.php'>Inscription</a></li>
+  <li><a href='./connexion.php'>Connexion</a></li>";}
+         
+         ?>
+
+
+
+
+
+
+</nav>
+    
+</body>
+
+
+</html>
+
