@@ -28,7 +28,7 @@ if(!empty($_GET['id_articles']) && isset($_GET['id_articles'])) {
     $article = $result;
     //var_dump($result);
 
-    $request = 'SELECT * FROM `articles` INNER JOIN `commentaires` ON articles.id = commentaires.id_article WHERE commentaires.id_article = "'.$id_articles.'";';
+    $request = 'SELECT * FROM `articles` INNER JOIN `commentaires` ON articles.id = commentaires.id_article WHERE commentaires.id_article = "'.$id_articles.'" ORDER BY commentaires.date DESC;';
     $calcul = $bdd->prepare($request);
     $calcul->execute();
     $result = $calcul->fetchAll(PDO::FETCH_ASSOC); 
@@ -36,7 +36,7 @@ if(!empty($_GET['id_articles']) && isset($_GET['id_articles'])) {
     //var_dump($result);
 }
 
-if (isset($_POST['commentaire'])) {
+if (isset($_POST['commentaire']) && strlen($_POST['commentaire']) > 0) {
     $id_articles = $_GET['id_articles'];
     $id_utilisateur = $_SESSION['user']['0']['id'];
     $commentaire = htmlspecialchars($_POST['commentaire']);
@@ -88,13 +88,10 @@ if (isset($_POST['commentaire'])) {
             }
             ?>
         
-        <h1>
-                      POSTER VOTRE COMMENTAIRE:
-                </h1>
-            <div id="ancre">
-            <form action="" method="POST">
-                                <textarea name="commentaire" cols="52" rows="5" placeholder="Merci d'exprimer votre point de vue dans le respect de la convention de genève"></textarea>
 
+            <div class="alignformcom" id="ancre">
+            <form class="formcom" action="" method="POST">
+                                <textarea name="commentaire" cols="120" rows="5" placeholder="Merci d'exprimer votre point de vue dans le respect de la convention de genève"></textarea>
                 <input class="bouton1" type="submit" id='submit' name="envoyer" value='Envoyer'>
             </form>
             </div>
