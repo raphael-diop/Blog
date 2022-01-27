@@ -282,6 +282,12 @@ text-align: center;
 }
 
 /*RG_ARTICLE*/
+.main{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 
 body {
   background-image: url('https://zupimages.net/up/22/03/8ev9.png');
@@ -390,3 +396,54 @@ text-align: end;}
   text-align: center;
 
 }
+
+.bouton1 {
+  width: 5em;
+  height: 3em;
+  margin-left: 25em;
+    margin-top: 20px;
+  margin-bottom: 20px;
+  text-decoration: none;
+  padding: 10px;
+  font-family: 'Noto Sans', sans-serif;
+  font-size: 1em;
+  color: #000000;
+  background-color: #ffffff;
+  border-radius: 0px;
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  border: 1px solid #000000;
+  box-shadow: 0px 3px 13px #ffffff;
+  -webkit-box-shadow: 0px 3px 13px #ffffff;
+  -moz-box-shadow: 0px 3px 13px #ffffff;
+  text-align: center;
+    }
+    
+    
+.bouton1:hover{
+  padding: 10px;
+  background-color: #f2f2f2dc;
+  box-shadow: 1px 1px 4px #ffffff;
+  -webkit-box-shadow: 1px 1px 4px #ffffff;
+  -moz-box-shadow: 1px 1px 4px #ffffff;
+        }
+
+
+.alignformcom {
+  display: flex;
+
+
+
+}
+
+.formcom {
+  
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  width: 30em;
+  position: relative;
+  vertical-align: center;
+
+}
+
