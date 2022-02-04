@@ -1,0 +1,304 @@
+<?php
+require_once 'config.php'; 
+include 'header.php';
+// ---------------Afficher les utilisateurs ---------------------------------------//
+$bdd = new PDO('mysql:host=localhost;dbname=blog;charset=utf8', 'root', '');
+
+/*$sql = 'SELECT *FROM `utilisateurs`';
+$query = $bdd->prepare($sql);
+$query->execute();
+$user = $query->fetchAll(PDO::FETCH_ASSOC);
+
+$sql = 'SELECT *FROM `categories`';
+$query = $bdd->prepare($sql);
+$query->execute();
+$categorie = $query->fetchAll(PDO::FETCH_ASSOC);
+
+$sql = 'SELECT *FROM `articles`';
+$query = $bdd->prepare($sql);
+$query->execute();
+$article = $query->fetchAll(PDO::FETCH_ASSOC);
+
+$sql = 'SELECT *FROM `commentaires`';
+$query = $bdd->prepare($sql);
+$query->execute();
+$commentaire = $query->fetchAll(PDO::FETCH_ASSOC);
+
+$sql = 'SELECT *FROM `droits`';
+$query = $bdd->prepare($sql);
+$query->execute();
+$droits = $query->fetchAll(PDO::FETCH_ASSOC);
+*/
+$id_droits = $_SESSION['user']['0']['id_droits'];
+
+if(isset($_SESSION) && $id_droits == 1337) {
+
+if(isset($_GET['element']) && $_GET['element'] == 'articles' )
+ {
+    $sql = 'SELECT *FROM `articles`';
+    $query = $bdd->prepare($sql);
+    $query->execute();
+    $article = $query->fetchAll(PDO::FETCH_ASSOC);
+    $titre ="Liste des articles";
+    echo "vous avez selectionné les articles";
+    ?>
+    <body>
+    <h1><?php echo $titre ?></h1>
+                <table>
+                  <thead>
+                      <th>id</th>
+                      <th>article</th>
+                      <th>id_utilisateur</th>
+                      <th>id_categorie</th>
+                      <th>date</th>
+                      <th>action</th>
+
+                  </thead>
+                  <tbody>
+                      <?php
+                      foreach($article as $articles){
+                      ?>
+                      <tr>
+                          <td data-label="Date"><?=$articles['id'] ?></td>
+                          <td data-label="Date"><?=$articles['article'] ?></td>
+                          <td data-label="Date"><?=$articles['id_utilisateur'] ?></td>
+                          <td data-label="Date"><?=$articles['id_categorie'] ?></td>
+                          <td data-label="Date"><?=$articles['date'] ?></td>
+                         
+                      </tr>
+
+                      <?php
+                      }
+                      ?>
+                      </body>
+<?php
+    
+}
+else if(isset($_GET['element']) && $_GET['element'] == 'users') {
+    $sql = 'SELECT *FROM `utilisateurs`';
+    $query = $bdd->prepare($sql);
+    $query->execute();
+    $user = $query->fetchAll(PDO::FETCH_ASSOC);
+    echo "vous avez selectionné les utilisateurs";
+    $titre ="Liste des utilisateurs";
+    //var_dump($user[0]['login']);
+    ?>
+    <body>
+    <h1><?php echo $titre ?></h1>
+                <table>
+                  <thead>
+                      <th>id</th>
+                      <th>login</th>
+                      <th>password</th>
+                      <th>email</th>
+                      <th>action</th>
+                  </thead>
+                  <tbody>
+                      <?php
+                      foreach($user as $users){
+                      ?>
+                      <tr>
+                          <td data-label="Date"><?=$users['id'] ?></td>
+                          <td data-label="Date"><?=$users['login'] ?></td>
+                          <td data-label="Date"><?=$users['password'] ?></td>
+                          <td data-label="Date"><?=$users['email'] ?></td>
+                          <td> <a href="./admin.php?element=users&amp;modif=<?= $users['id']; ?>">modification</a></td> 
+                      </tr>
+                      <?php
+                      }
+                      ?>
+
+                      <?php
+                      if($_GET['modif'] !== 0 && !empty($_GET['modif'])){
+                          $id = $_GET['modif'];
+                          //recupération des données users
+                          $query = "SELECT *FROM `utilisateurs` WHERE id='$id'";
+                          $query = $bdd->prepare($query);
+                          $query->execute();
+                          $recup = $query->fetchAll(PDO::FETCH_ASSOC);
+
+                          //modification des données utilisateurs
+                          if(isset($_POST['login']) && $_POST['email'] && $_POST['id_droits']){
+                          $id = $_GET['modif'];
+                          $login = htmlspecialchars($_POST['login']);
+                          $email = htmlspecialchars($_POST['email']);
+                          $id_droits = htmlspecialchars($_POST['id_droits']);
+                          $query = "UPDATE utilisateurs SET  `login` = '$login', `email` = '$email' , `id_droits` = '$id_droits'  WHERE id = $id";
+                          $query = $bdd->prepare($query);
+                          $query->execute();
+                          $modif = $query->fetchAll(PDO::FETCH_ASSOC);
+                          var_dump($query);
+                          var_dump($modif);
+                        }
+                        ?>
+                          
+                           <form method="POST">
+                      
+                                    <label for="login">Login</label>
+                                    <input type="text" id="login" name="login" class="form-control" value="<?=$recup[0]['login'] ?>">
+                         
+                         
+                                    <label for="email">email</label>
+                                    <input type="text" id="email" name="email"  class="form-control" value="<?= $recup[0]['email'] ?>">
+                        
+                                    <label for="id_droits">id_droits</label>
+                                    <input type="text" id="id_droits" name="id_droits"  class="form-control" value="<?= $recup[0]['id_droits'] ?>">
+                 
+                                    <input type="submit" name="modifier" value="Modifier">
+                            </form>
+
+                    <?php  
+                      }
+                    ?>
+                      
+
+
+                    
+                      </body>
+<?php
+
+}
+
+else if(isset($_GET['element']) && $_GET['element'] == 'commentaires') {
+
+    $sql = 'SELECT *FROM `commentaires`';
+    $query = $bdd->prepare($sql);
+    $query->execute();
+    $commentaire = $query->fetchAll(PDO::FETCH_ASSOC);
+    echo "vous avez selectionné les commentaires";
+    $titre ="Liste des commentaires";
+
+    ?>
+    <body>
+    <h1><?php echo $titre ?></h1>
+                <table>
+                  <thead>
+                      <th>id</th>
+                      <th>commentaire</th>
+                      <th>id_utilisateur</th>
+                      <th>id_article</th>
+                      <th>date</th>
+                      <th>action</th>
+                  </thead>
+                  <tbody>
+                      <?php
+                      foreach($commentaire as $commentaires){
+                      ?>
+                      <tr>
+                      <td data-label="Date"><?=$commentaires['id'] ?></td>
+                          <td data-label="Date"><?=$commentaires['commentaire'] ?></td>
+                          <td data-label="Date"><?=$commentaires['id_utilisateur'] ?></td>
+                          <td data-label="Date"><?=$commentaires['id_article'] ?></td>
+                          <td data-label="Date"><?=$commentaires['date'] ?></td>
+                      </tr>
+
+                      <?php
+                      }
+                      ?>
+                      </body>
+<?php
+
+
+}
+
+else if(isset($_GET['element']) && $_GET['element'] == 'categories') {
+    $sql = 'SELECT *FROM `categories`';
+    $query = $bdd->prepare($sql);
+    $query->execute();
+    $categorie = $query->fetchAll(PDO::FETCH_ASSOC);
+    echo "vous avez selectionné les catégories";
+    $titre ="Liste des catégories";
+
+    ?>
+    <body>
+    <h1><?php echo $titre ?></h1>
+                <table>
+                  <thead>
+                      <th>id</th>
+                      <th>nom</th>
+                      <th>action</th>
+ 
+                  </thead>
+                  <tbody>
+                      <?php
+                      foreach($categorie as $categories){
+                      ?>
+                      <tr>
+                      <td data-label="Date"><?=$categories['id'] ?></td>
+                          <td data-label="Date"><?=$categories['nom'] ?></td>
+
+                      </tr>
+
+                      <?php
+                      }
+                      ?>
+                      </body>
+<?php
+
+}
+else if(isset($_GET['element']) && $_GET['element'] == 'droits') {
+    $sql = 'SELECT *FROM `droits`';
+    $query = $bdd->prepare($sql);
+    $query->execute();
+    $droit = $query->fetchAll(PDO::FETCH_ASSOC);
+    echo "vous avez selectionné les droits";
+    $titre ="Liste des droits";
+
+    ?>
+    <body>
+    <h1><?php echo $titre ?></h1>
+                <table>
+                  <thead>
+                      <th>id</th>
+                      <th>nom</th>
+                      <th>action</th>
+ 
+                  </thead>
+                  <tbody>
+                      <?php
+                      foreach($droit as $droits){
+                      ?>
+                      <tr>
+                      <td data-label="Date"><?=$droits['id'] ?></td>
+                          <td data-label="Date"><?=$droits['nom'] ?></td>
+
+                      </tr>
+
+                      <?php
+                      }
+                      ?>
+                      </body>
+<?php
+
+}
+}
+
+// else {
+//     header("Location:./index.php");
+// }
+
+
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+</head>
+<body>
+<form action="admin.php" method="get">
+  Selectionnez un élément
+  <button name="element" type="submit" value="users">Utilisateurs</button>
+  <button name="element" type="submit" value="commentaires">Commentaires</button>
+  <button name="element" type="submit" value="articles">Articles</button>
+  <button name="element" type="submit" value="droits">Droits</button>
+  <button name="element" type="submit" value="categories">Catégories</button>
+  
+</form>
+
+
+</body>
+</html>
