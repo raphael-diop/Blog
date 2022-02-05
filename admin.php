@@ -74,14 +74,53 @@ if(isset($_GET['element']) && $_GET['element'] == 'articles' )
                           <td data-label="Date"><?=$articles['id_categorie'] ?></td>
                           <td data-label="Date"><?=$articles['date'] ?></td>
                           <td data-label="Date"><?=$com_from_art ?></td>
-                          <td data-label="Date">a faire</td>
-
-
+                          <td> <a href="./admin.php?element=articles&amp;modif=<?= $articles['id']; ?>">modification</a></td> 
                       </tr>
 
                       <?php
                       }
                       ?>
+                      <?php
+                      if($_GET['modif'] !== 0 && !empty($_GET['modif'])){
+                          $id = $_GET['modif'];
+                          //recupération des données users
+                          $query = "SELECT *FROM `articles` WHERE id='$id'";
+                          $query = $bdd->prepare($query);
+                          $query->execute();
+                          $recup = $query->fetchAll(PDO::FETCH_ASSOC);
+
+                          //modification des données utilisateurs
+                          if(isset($_POST['article']) && $_POST['id_categorie']){
+                          $id = $_GET['modif'];
+                          $article = htmlspecialchars($_POST['article']);
+                          $id_categorie = htmlspecialchars($_POST['id_categorie']);
+                          $query = "UPDATE articles SET  `article` = '$article', `id_categorie` = '$id_categorie' WHERE id = $id";
+                          $query = $bdd->prepare($query);
+                          $query->execute();
+                          $modif = $query->fetchAll(PDO::FETCH_ASSOC);
+                          var_dump($query);
+                          var_dump($modif);
+                        }
+                        ?>
+                          
+                           <form method="POST">
+                      
+                                    <label for="article">Article</label>
+                                    <input type="text" id="article" name="article" class="form-control" value="<?=$recup[0]['article'] ?>">
+                         
+                         
+                                    <label for="id_categorie">Categorie</label>
+                                    <input type="text" id="id_categorie" name="id_categorie"  class="form-control" value="<?= $recup[0]['id_categorie'] ?>">
+                        
+                                    <input type="submit" name="modifier" value="Modifier">
+                            </form>
+
+                    <?php  
+                      }
+                    ?>
+                      
+                      
+
                       </body>
 <?php
     
@@ -255,8 +294,8 @@ else if(isset($_GET['element']) && $_GET['element'] == 'commentaires') {
                       <th>id_utilisateur</th>
                       <th>id_article</th>
                       <th>date</th>
-                      
                       <th>action</th>
+                      
                   </thead>
                   <tbody>
                       <?php
@@ -268,11 +307,55 @@ else if(isset($_GET['element']) && $_GET['element'] == 'commentaires') {
                           <td data-label="Date"><?=$commentaires['id_utilisateur'] ?></td>
                           <td data-label="Date"><?=$commentaires['id_article'] ?></td>
                           <td data-label="Date"><?=$commentaires['date'] ?></td>
+                          <td> <a href="./admin.php?element=commentaires&amp;modif=<?= $commentaires['id']; ?>">modification</a></td> 
+
                       </tr>
 
                       <?php
                       }
                       ?>
+
+<?php
+                      if($_GET['modif'] !== 0 && !empty($_GET['modif'])){
+                          $id = $_GET['modif'];
+                          //recupération des données users
+                          $query = "SELECT *FROM `commentaires` WHERE id='$id'";
+                          $query = $bdd->prepare($query);
+                          $query->execute();
+                          $recup = $query->fetchAll(PDO::FETCH_ASSOC);
+
+                          //modification des données utilisateurs
+                          if(isset($_POST['commentaire']) && $_POST['id_article']){
+                          $id = $_GET['modif'];
+                          $commentaire = htmlspecialchars($_POST['commentaire']);
+                          $id_article = htmlspecialchars($_POST['id_article']);
+                          $query = "UPDATE commentaires SET  `commentaire` = '$commentaire', `id_article` = '$id_article' WHERE id = $id";
+                          $query = $bdd->prepare($query);
+                          $query->execute();
+                          $modif = $query->fetchAll(PDO::FETCH_ASSOC);
+                          var_dump($query);
+                          var_dump($modif);
+                        }
+                        ?>
+                          
+                           <form method="POST">
+                      
+                                    <label for="article">Commentaires</label>
+                                    <input type="text" id="commentaire" name="commentaire" class="form-control" value="<?=$recup[0]['commentaire'] ?>">
+                         
+                         
+                                    <label for="id_categorie">Categorie</label>
+                                    <input type="text" id="id_article" name="id_article"  class="form-control" value="<?= $recup[0]['id_article'] ?>">
+                        
+                                    <input type="submit" name="modifier" value="Modifier">
+                            </form>
+
+                    <?php  
+                      }
+                    ?>
+                      
+                      
+
                       </body>
 <?php
 
@@ -304,12 +387,36 @@ else if(isset($_GET['element']) && $_GET['element'] == 'categories') {
                       <tr>
                       <td data-label="Date"><?=$categories['id'] ?></td>
                           <td data-label="Date"><?=$categories['nom'] ?></td>
-
-                      </tr>
+                      </tr>                      
 
                       <?php
                       }
                       ?>
+
+
+                      
+<?php
+
+
+                          //modification des données utilisateurs
+                          if(isset($_POST['nom'])){
+                          $nom = htmlspecialchars($_POST['nom']);
+                          $query = "INSERT INTO `categories`( `nom`) VALUES ( '$nom')";
+                          $query = $bdd->prepare($query);
+                          $query->execute();
+                          $modif = $query->fetchAll(PDO::FETCH_ASSOC);
+                          var_dump($query);
+                          var_dump($modif);
+                        }
+                        ?>
+                           <form method="POST">
+                      
+                                    <label for="nom">Catégorie</label>
+                                    <input type="text" id="nom" name="nom" class="form-control" value="">
+                        
+                                    <input type="submit" name="modifier" value="Ajouter">
+                            </form>
+
                       </body>
 <?php
 
@@ -339,7 +446,6 @@ else if(isset($_GET['element']) && $_GET['element'] == 'droits') {
                       <tr>
                       <td data-label="Date"><?=$droits['id'] ?></td>
                           <td data-label="Date"><?=$droits['nom'] ?></td>
-
                       </tr>
 
                       <?php
