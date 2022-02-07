@@ -66,17 +66,21 @@ else {
 
                 <h1>
                 </h1>
-                <textarea name="article" cols="52" rows="5" maxlength="30000">Créez votre article</textarea>
+                <textarea name="article" cols="52" rows="5" maxlength="30000" >Créez votre article</textarea>
 
                 <input type="submit" id='submit' name="envoyer" value='Envoyer'>
                 <h1></h1>
+                <?php $sql = 'SELECT `nom`, `id`  FROM `categories`';
+$query = $bdd->prepare($sql);
+$query->execute();
+$result = $query->fetchAll(PDO::FETCH_ASSOC);
+$categories = $result; 
+?>
                 
                 <select name="categorie">
-                    <option value="">choisissez une catégorie</option>
-                    <option value="1">Life Style</option>
-                    <option value="2">Street Wear</option>
-                    <option value="3">Jul</option>
-                    <option value="4">Road Style</option>
+                <?php foreach($categories as $categorie) {?>
+                    <option value="<?=$categorie['id']?>"><?=$categorie['nom']?></option>
+                    <?php }?>
                 </select>
             </form>
         </div>
