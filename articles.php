@@ -127,18 +127,40 @@ else {
     <title>Document</title>
 </head>
 <body>
+    <main>
         <article class=rgarticle>
             <?php
             foreach($articles as $article) {
             ?>
             <div class=articleshadow>    <p class="articledate"><?= $article['date'] ?></p>
-                <p><?= $article['article'] ?></p> </div>
+                <p><?= $article['article'] ?></p> 
+                <a href="./article.php?id_articles=<?= $article['id'] ?>" ><img class="commentaire-icone"
+                src="https://www.zupimages.net/up/22/04/tlzm.png"
+                alt="Commentaires" ></a>
+            </div>
+                
 
             <?php
             }
             ?>
         </article>
-<div class="centrerpagination">
+    </main>
+
+                <!--<form method="GET">
+    <a href="./articles.php?categorie=life">
+        <input type="button" value="life">
+    </a>
+    <a href="./articles.php?categorie=street">
+        <input type="button" value="street">
+    </a>
+    <a href="./articles.php?categorie=jul">
+        <input type="button" value="jul">
+    </a>
+    <a href="./articles.php?categorie=road">
+        <input type="button" value="road">
+    </a>
+    </form>-->
+    <div class="centrerpagination">
     <nav class="pagination">
     <ul>                 <!-- dans cette boucle et cette pagination j'utilise l'appel d'un css par une condition php pour désactiver le bouton suivant et précédent
                         avec l'echo disabled, j'utilise aussi des condition pour générer mon url qui devra prendre la forme suivante : articles.php?page=1 si aucune catégorie n'est selectionné
@@ -159,21 +181,6 @@ else {
                     </ul>
                 </nav>
 </div>
-
-                <!--<form method="GET">
-    <a href="./articles.php?categorie=life">
-        <input type="button" value="life">
-    </a>
-    <a href="./articles.php?categorie=street">
-        <input type="button" value="street">
-    </a>
-    <a href="./articles.php?categorie=jul">
-        <input type="button" value="jul">
-    </a>
-    <a href="./articles.php?categorie=road">
-        <input type="button" value="road">
-    </a>
-    </form>-->
-    
 </body>
+
 </html>
