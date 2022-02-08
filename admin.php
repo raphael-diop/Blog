@@ -87,6 +87,12 @@ if(isset($_GET['element']) && $_GET['element'] == 'articles' )
                           $query->execute();
                           $recup = $query->fetchAll(PDO::FETCH_ASSOC);
 
+                          if(empty($recup)) {
+                            $recup[0]['article'] = " ";
+                            $recup[0]['id_categorie'] = " ";
+                                    
+                          }
+
                           //modification des données utilisateurs
                           if(isset($_POST['article']) && $_POST['id_categorie']){
                           $id = $_GET['modif'];
@@ -99,6 +105,15 @@ if(isset($_GET['element']) && $_GET['element'] == 'articles' )
                           var_dump($query);
                           var_dump($modif);
                         }
+                        if(isset($_POST['supprimer'])){
+                            $query = "DELETE FROM `articles` WHERE `id`=$id";
+                            $query = $bdd->prepare($query);
+                            $query->execute();
+                            //header('Location:./admin.php');
+                            //unset($_GET); unset($_POST);
+
+                        }
+                        
                         ?>
                           
                            <form method="POST">
@@ -111,6 +126,8 @@ if(isset($_GET['element']) && $_GET['element'] == 'articles' )
                                     <input type="text" id="id_categorie" name="id_categorie"  class="form-control" value="<?= $recup[0]['id_categorie'] ?>">
                         
                                     <input type="submit" name="modifier" value="Modifier">
+                                    <input  type="submit" name="supprimer" value="supprimer" method="POST"> 
+
                             </form>
 
                     <?php  
@@ -179,6 +196,13 @@ else if(isset($_GET['element']) && $_GET['element'] == 'users') {
                           $query = $bdd->prepare($query);
                           $query->execute();
                           $recup = $query->fetchAll(PDO::FETCH_ASSOC);
+                          
+                          if(empty($recup)) {
+                            $recup[0]['login'] = "cette utilisateur n'existe pas";
+                            $recup[0]['email'] = "ce mail n'existe pas";
+                            $recup[0]['id_droits'] = "cet id droit n'existe pas"; 
+                                    
+                          }
 
                           //modification des données utilisateurs
                           if(isset($_POST['login']) && $_POST['email'] && $_POST['id_droits']){
@@ -198,6 +222,9 @@ else if(isset($_GET['element']) && $_GET['element'] == 'users') {
                             $query = "DELETE FROM `utilisateurs` WHERE `id`=$id";
                             $query = $bdd->prepare($query);
                             $query->execute();
+                            //header('Location:./admin.php');
+                            //unset($_GET); unset($_POST);
+
                         }
                         ?>
                           
@@ -214,7 +241,7 @@ else if(isset($_GET['element']) && $_GET['element'] == 'users') {
                                     <input type="text" id="id_droits" name="id_droits"  class="form-control" value="<?= $recup[0]['id_droits'] ?>">
                  
                                     <input type="submit" name="modifier" value="Modifier">
-                                    <input  type="submit" name="supprimer" value="supprimer" method="POST"></td> 
+                                    <input  type="submit" name="supprimer" value="supprimer" method="POST"> 
 
                             </form>
 
@@ -286,6 +313,13 @@ else if(isset($_GET['element']) && $_GET['element'] == 'moderateurs') {
                           $query = $bdd->prepare($query);
                           $query->execute();
                           $recup = $query->fetchAll(PDO::FETCH_ASSOC);
+
+                          if(empty($recup)) {
+                            $recup[0]['login'] = " ";
+                            $recup[0]['email'] = " ";
+                            $recup[0]['id_droits'] = " "; 
+                                    
+                          }
 
                           //modification des données utilisateurs
                           if(isset($_POST['login']) && $_POST['email'] && $_POST['id_droits']){
@@ -394,6 +428,11 @@ else if(isset($_GET['element']) && $_GET['element'] == 'commentaires') {
                           var_dump($query);
                           var_dump($modif);
                         }
+                        if(empty($recup)) {
+                            $recup[0]['commentaire'] = " ";
+                            $recup[0]['id_article'] = " ";
+                                    
+                          }
                         if(isset($_POST['supprimer'])){
                             $query = "DELETE FROM `commentaires` WHERE `id`=$id";
                             $query = $bdd->prepare($query);
