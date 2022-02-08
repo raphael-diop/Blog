@@ -4,31 +4,29 @@ include 'header.php';
 // ---------------Afficher les utilisateurs ---------------------------------------//
 $bdd = new PDO('mysql:host=localhost;dbname=blog;charset=utf8', 'root', '');
 
-/*$sql = 'SELECT *FROM `utilisateurs`';
-$query = $bdd->prepare($sql);
-$query->execute();
-$user = $query->fetchAll(PDO::FETCH_ASSOC);
-
-$sql = 'SELECT *FROM `categories`';
-$query = $bdd->prepare($sql);
-$query->execute();
-$categorie = $query->fetchAll(PDO::FETCH_ASSOC);
-
-$sql = 'SELECT *FROM `articles`';
-$query = $bdd->prepare($sql);
-$query->execute();
-$article = $query->fetchAll(PDO::FETCH_ASSOC);
-
-$sql = 'SELECT *FROM `commentaires`';
-$query = $bdd->prepare($sql);
-$query->execute();
-$commentaire = $query->fetchAll(PDO::FETCH_ASSOC);
-
-$sql = 'SELECT *FROM `droits`';
-$query = $bdd->prepare($sql);
-$query->execute();
-$droits = $query->fetchAll(PDO::FETCH_ASSOC);
+?>
 */
+
+
+<!DOCTYPE html>
+<html lang="en">
+<link rel="stylesheet" href="style.css">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<form action="admin.php" method="get">
+  <button name="element" type="submit" value="users">Utilisateurs</button>
+  <button name="element" type="submit" value="commentaires">Commentaires</button>
+  <button name="element" type="submit" value="articles">Articles</button>
+  <button name="element" type="submit" value="droits">Droits</button>
+  <button name="element" type="submit" value="categories">Catégories</button>
+  <button name="element" type="submit" value="moderateurs">Modérateurs</button>
+</form>
+<?php
 $id_droits = $_SESSION['user']['0']['id_droits'];
 
 if(isset($_SESSION) && $id_droits == 1337) {
@@ -40,7 +38,7 @@ if(isset($_GET['element']) && $_GET['element'] == 'articles' )
     $query->execute();
     $article = $query->fetchAll(PDO::FETCH_ASSOC);
     $titre ="Liste des articles";
-    echo "vous avez selectionné les articles";
+    
     ?>
     <body>
     <h1><?php echo $titre ?></h1>
@@ -130,7 +128,7 @@ else if(isset($_GET['element']) && $_GET['element'] == 'users') {
     $query = $bdd->prepare($sql);
     $query->execute();
     $user = $query->fetchAll(PDO::FETCH_ASSOC);
-    echo "vous avez selectionné les utilisateurs";
+  
     $titre ="Liste des utilisateurs";
     //var_dump($user[0]['login']);
     ?>
@@ -165,7 +163,7 @@ else if(isset($_GET['element']) && $_GET['element'] == 'users') {
                           <td data-label="Date"><?=$users['password'] ?></td>
                           <td data-label="Date"><?=$users['email'] ?></td>
                           <td data-label="Date"><?=$art_from_user ?></td>
-                          <td> <a href="./admin.php?element=users&amp;modif=<?= $users['id']; ?>">modification</a></td> 
+                          <td> <a href="./admin.php?element=users&amp;modif=<?= $users['id']; ?>">modification</a>
                       </tr>
 
 
@@ -174,7 +172,7 @@ else if(isset($_GET['element']) && $_GET['element'] == 'users') {
                       ?>
 
 <?php
-                      if($_GET['modif'] !== 0 && !empty($_GET['modif'])){
+                      if(isset($_GET['modif']) && !empty($_GET['modif'])){
                           $id = $_GET['modif'];
                           //recupération des données users
                           $query = "SELECT *FROM `utilisateurs` WHERE id='$id'";
@@ -195,6 +193,12 @@ else if(isset($_GET['element']) && $_GET['element'] == 'users') {
                           var_dump($query);
                           var_dump($modif);
                         }
+
+                        if(isset($_POST['supprimer'])){
+                            $query = "DELETE FROM `utilisateurs` WHERE `id`=$id";
+                            $query = $bdd->prepare($query);
+                            $query->execute();
+                        }
                         ?>
                           
                            <form method="POST">
@@ -210,6 +214,8 @@ else if(isset($_GET['element']) && $_GET['element'] == 'users') {
                                     <input type="text" id="id_droits" name="id_droits"  class="form-control" value="<?= $recup[0]['id_droits'] ?>">
                  
                                     <input type="submit" name="modifier" value="Modifier">
+                                    <input  type="submit" name="supprimer" value="supprimer" method="POST"></td> 
+
                             </form>
 
                     <?php  
@@ -229,7 +235,7 @@ else if(isset($_GET['element']) && $_GET['element'] == 'moderateurs') {
     $query = $bdd->prepare($sql);
     $query->execute();
     $modo = $query->fetchAll(PDO::FETCH_ASSOC);
-    echo "vous avez selectionné les modérateurs";
+    
     $titre ="Liste des modérateurs";
 
     ?>
@@ -263,6 +269,7 @@ else if(isset($_GET['element']) && $_GET['element'] == 'moderateurs') {
                       <td data-label="Date"><?=$modos['password'] ?></td>
                       <td data-label="Date"><?=$modos['email'] ?></td>
                       <td data-label="Date"><?=$art_from_modo ?></td>
+                      <td> <a href="./admin.php?element=moderateurs&amp;modif=<?= $modos['id']; ?>">modification</a></td> 
 
 
                       </tr>
@@ -270,9 +277,60 @@ else if(isset($_GET['element']) && $_GET['element'] == 'moderateurs') {
                       <?php
                       }
                       ?>
-                      </body>
-<?php
 
+                      <?php
+                      if(isset($_GET['modif']) && !empty($_GET['modif'])){
+                          $id = $_GET['modif'];
+                          //recupération des données users
+                          $query = "SELECT *FROM `utilisateurs` WHERE id='$id'";
+                          $query = $bdd->prepare($query);
+                          $query->execute();
+                          $recup = $query->fetchAll(PDO::FETCH_ASSOC);
+
+                          //modification des données utilisateurs
+                          if(isset($_POST['login']) && $_POST['email'] && $_POST['id_droits']){
+                          $id = $_GET['modif'];
+                          $login = htmlspecialchars($_POST['login']);
+                          $email = htmlspecialchars($_POST['email']);
+                          $id_droits = htmlspecialchars($_POST['id_droits']);
+                          $query = "UPDATE utilisateurs SET  `login` = '$login', `email` = '$email' , `id_droits` = '$id_droits'  WHERE id = $id";
+                          $query = $bdd->prepare($query);
+                          $query->execute();
+                          $modif = $query->fetchAll(PDO::FETCH_ASSOC);
+                          var_dump($query);
+                          var_dump($modif);
+                        }
+
+                        if(isset($_POST['supprimer'])){
+                            $query = "DELETE FROM `utilisateurs` WHERE `id`=$id";
+                            $query = $bdd->prepare($query);
+                            $query->execute();
+                        }
+                        ?>
+                          
+                           <form method="POST">
+                      
+                                    <label for="login">Login</label>
+                                    <input type="text" id="login" name="login" class="form-control" value="<?=$recup[0]['login'] ?>">
+                         
+                         
+                                    <label for="email">email</label>
+                                    <input type="text" id="email" name="email"  class="form-control" value="<?= $recup[0]['email'] ?>">
+                        
+                                    <label for="id_droits">id_droits</label>
+                                    <input type="text" id="id_droits" name="id_droits"  class="form-control" value="<?= $recup[0]['id_droits'] ?>">
+                 
+                                    <input type="submit" name="modifier" value="Modifier">
+                                    <input  type="submit" name="supprimer" value="supprimer" method="POST"></td> 
+
+                            </form>
+                            <?php  
+                      }
+                    ?>
+
+                      </body>
+                      
+<?php
 
 }
 else if(isset($_GET['element']) && $_GET['element'] == 'commentaires') {
@@ -281,7 +339,7 @@ else if(isset($_GET['element']) && $_GET['element'] == 'commentaires') {
     $query = $bdd->prepare($sql);
     $query->execute();
     $commentaire = $query->fetchAll(PDO::FETCH_ASSOC);
-    echo "vous avez selectionné les commentaires";
+    
     $titre ="Liste des commentaires";
 
     ?>
@@ -316,7 +374,7 @@ else if(isset($_GET['element']) && $_GET['element'] == 'commentaires') {
                       ?>
 
 <?php
-                      if($_GET['modif'] !== 0 && !empty($_GET['modif'])){
+                      if(isset($_GET['modif']) && !empty($_GET['modif'])){
                           $id = $_GET['modif'];
                           //recupération des données users
                           $query = "SELECT *FROM `commentaires` WHERE id='$id'";
@@ -336,6 +394,11 @@ else if(isset($_GET['element']) && $_GET['element'] == 'commentaires') {
                           var_dump($query);
                           var_dump($modif);
                         }
+                        if(isset($_POST['supprimer'])){
+                            $query = "DELETE FROM `commentaires` WHERE `id`=$id";
+                            $query = $bdd->prepare($query);
+                            $query->execute();
+                        }
                         ?>
                           
                            <form method="POST">
@@ -348,6 +411,8 @@ else if(isset($_GET['element']) && $_GET['element'] == 'commentaires') {
                                     <input type="text" id="id_article" name="id_article"  class="form-control" value="<?= $recup[0]['id_article'] ?>">
                         
                                     <input type="submit" name="modifier" value="Modifier">
+                                    <input  type="submit" name="supprimer" value="supprimer" method="POST"></td> 
+
                             </form>
 
                     <?php  
@@ -367,7 +432,7 @@ else if(isset($_GET['element']) && $_GET['element'] == 'categories') {
     $query = $bdd->prepare($sql);
     $query->execute();
     $categorie = $query->fetchAll(PDO::FETCH_ASSOC);
-    echo "vous avez selectionné les catégories";
+   
     $titre ="Liste des catégories";
 
     ?>
@@ -387,6 +452,8 @@ else if(isset($_GET['element']) && $_GET['element'] == 'categories') {
                       <tr>
                       <td data-label="Date"><?=$categories['id'] ?></td>
                           <td data-label="Date"><?=$categories['nom'] ?></td>
+                          <td> <a href="./admin.php?element=categories&amp;modif=<?= $categories['id']; ?>">modification</a></td> 
+
                       </tr>                      
 
                       <?php
@@ -408,6 +475,12 @@ else if(isset($_GET['element']) && $_GET['element'] == 'categories') {
                           var_dump($query);
                           var_dump($modif);
                         }
+
+                        if(isset($_POST['supprimer'])){
+                            $query = 'DELETE FROM `categories` WHERE `nom`= "'.$nom.'"';
+                            $query = $bdd->prepare($query);
+                            $query->execute();
+                        }
                         ?>
                            <form method="POST">
                       
@@ -415,6 +488,8 @@ else if(isset($_GET['element']) && $_GET['element'] == 'categories') {
                                     <input type="text" id="nom" name="nom" class="form-control" value="">
                         
                                     <input type="submit" name="modifier" value="Ajouter">
+                                    <input  type="submit" name="supprimer" value="supprimer" method="POST"></td> 
+
                             </form>
 
                       </body>
@@ -426,7 +501,7 @@ else if(isset($_GET['element']) && $_GET['element'] == 'droits') {
     $query = $bdd->prepare($sql);
     $query->execute();
     $droit = $query->fetchAll(PDO::FETCH_ASSOC);
-    echo "vous avez selectionné les droits";
+   
     $titre ="Liste des droits";
 
     ?>
@@ -463,25 +538,6 @@ else {
 
 
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-<form action="admin.php" method="get">
-  Selectionnez un élément
-  <button name="element" type="submit" value="users">Utilisateurs</button>
-  <button name="element" type="submit" value="commentaires">Commentaires</button>
-  <button name="element" type="submit" value="articles">Articles</button>
-  <button name="element" type="submit" value="droits">Droits</button>
-  <button name="element" type="submit" value="categories">Catégories</button>
-  <button name="element" type="submit" value="moderateurs">Modérateurs</button>
-</form>
 
 
 
